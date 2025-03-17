@@ -128,8 +128,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 CSRF_TRUSTED_ORIGINS =[
-    "kopa-duka.com"
-    "www.kopa-duka.com"
-    "api.kopa-duka.com"
-    "www.kopa-duka.com"
+    "https://kopa-duka.com",
+    "https://www.kopa-duka.com",
+    "https://api.kopa-duka.com",
+    "https://www.kopa-duka.com",
 ]
