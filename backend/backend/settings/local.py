@@ -120,4 +120,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "../asset")
 
 LOGIN_URL = '/login/' 
 
-print(MEDIA_ROOT)
+CSRF_TRUSTED_ORIGINS =[
+    "kopa-duka.com"
+    "www.kopa-duka.com"
+    "api.kopa-duka.com"
+    "www.kopa-duka.com"
+]
