@@ -306,6 +306,37 @@ class SupplierDetailView(LoginRequiredMixin,DetailView):
     context_object_name = 'supplier'
 
 
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
+from .models import Supplier
+from .forms import SupplierForm  # You need to create this form, as shown below
+from django import forms
+from .models import Supplier
+
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = ['name', 'contact_person', 'phone_number', 'email', 'address', 'is_verified']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'contact_person': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_verified': forms.CheckboxInput(attrs={'class': 'forms-control pull-left'}),
+        }
+
+class SupplierUpdateView(UpdateView):
+    model = Supplier
+    template_name = 'supplier/supplier_update.html'  # Template to render the form
+    form_class = SupplierForm  # Form to use for updating
+
+    # This defines where to redirect the user after a successful update
+    success_url = reverse_lazy('supplier_list')  # Assuming you have a 'supplier_list' view
+
+    def get_object(self, queryset=None):
+        # Get the supplier object that is being updated based on the pk in the URL
+        return super().get_object(queryset)
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required

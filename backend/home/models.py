@@ -205,12 +205,3 @@ class LoanRepaymentSchedule(TimeStampedModel):
         self.status = 'PAID'
         self.save()
 
-
-
-
-
-# class Transactions(Model):
-    # 
-    # 
-# class Requests(Model):
-    # 

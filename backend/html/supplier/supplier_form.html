@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Create New Supplier</h1>
-    <form method="post">
+    <form method="post" action="{% url 'supplier_create' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Create Supplier</button>
