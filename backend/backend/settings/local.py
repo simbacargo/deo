@@ -120,6 +120,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "../asset")
 
 LOGIN_URL = '/login/' 
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+
 CSRF_TRUSTED_ORIGINS =[
     "kopa-duka.com"
     "www.kopa-duka.com"
