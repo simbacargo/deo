@@ -141,3 +141,8 @@ def profile(request, username) -> Callable:
     # data['is_self']=is_self
     
     return render(request, 'users-profile.html', data)
+
+
+
+def error(receiver):
+    return render(receiver,"pages-error-404.html")
