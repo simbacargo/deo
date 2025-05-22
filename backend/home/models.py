@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Model, CharField, DateTimeField,TextField, CASCADE,Sum
-
+from authentication.models import User
 from django.utils import timezone
 
 class TimeStampedModel(models.Model):
@@ -18,7 +18,7 @@ class Vendor(TimeStampedModel):
         ('SOLOPRENEUR', 'Solopreneur'),
         ('CORPORATION', 'Corporation'),
     ]
-    
+    # user = models.OneToOneField(User,null=True, on_delete=models.CASCADE, related_name='vendor_profile')
     name = models.CharField(max_length=255)
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
@@ -82,6 +82,7 @@ class Vendor(TimeStampedModel):
 
 class Supplier(TimeStampedModel):
     name = models.CharField(max_length=255)
+    # user = models.OneToOneField(User,null=True, on_delete=models.CASCADE, related_name='supplier_profile')
     contact_person = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     email = models.EmailField()
@@ -90,6 +91,9 @@ class Supplier(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+
+
 
 class Loan(TimeStampedModel):
     LOAN_STATUS_CHOICES = [

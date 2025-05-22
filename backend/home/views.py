@@ -6,6 +6,90 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import Vendor
 from .forms import VendorForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
+from .models import Vendor, Supplier
+from .serializers import (
+    VendorRegistrationSerializer,
+    SupplierRegistrationSerializer,
+    VendorDashboardSerializer,
+    SupplierDashboardSerializer
+)
+
+# Vendor Registration API
+class VendorRegisterView(generics.CreateAPIView):
+    serializer_class = VendorRegistrationSerializer
+
+
+# Supplier Registration API
+class SupplierRegisterView(generics.CreateAPIView):
+    serializer_class = SupplierRegistrationSerializer
+
+
+# Vendor Dashboard API
+class VendorDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        vendor = getattr(request.user, 'vendor_profile', None)
+        if vendor:
+            serializer = VendorDashboardSerializer(vendor)
+            return Response(serializer.data)
+        return Response({'detail': 'Not a vendor.'}, status=403)
+
+
+# Supplier Dashboard API
+class SupplierDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        supplier = getattr(request.user, 'supplier_profile', None)
+        if supplier:
+            serializer = SupplierDashboardSerializer(supplier)
+            return Response(serializer.data)
+        return Response({'detail': 'Not a supplier.'}, status=403)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions, status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+
+from .models import Vendor, Supplier
+
+class LoginAPIView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+
+            # Identify user type (Vendor or Supplier)
+            user_type = None
+            if hasattr(user, 'vendor_profile'):
+                user_type = 'vendor'
+            elif hasattr(user, 'supplier_profile'):
+                user_type = 'supplier'
+
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user_type": user_type,
+                "username": user.username,
+                "email": user.email
+            })
+        else:
+            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 # View to list all vendors (Admin-only view)
 class VendorCreateView(LoginRequiredMixin,CreateView):

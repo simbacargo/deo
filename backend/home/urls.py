@@ -67,3 +67,30 @@ urlpatterns = [
     path('vendor/dashboard/', vendor_dashboard, name='vendor_dashboard'),
 ] + urlpatterns
 
+from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from .views import (
+    VendorRegisterView,
+    SupplierRegisterView,
+    VendorDashboardView,
+    SupplierDashboardView
+)
+
+urlpatterns = [
+    path('api/register/vendor/', VendorRegisterView.as_view(), name='vendor_register'),
+    path('api/register/supplier/', SupplierRegisterView.as_view(), name='supplier_register'),
+
+    path('api/dashboard/vendor/', VendorDashboardView.as_view(), name='vendor_dashboard'),
+    path('api/dashboard/supplier/', SupplierDashboardView.as_view(), name='supplier_dashboard'),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+] + urlpatterns
+
+
+urlpatterns = [
+    path('api/login/', LoginAPIView.as_view(), name='api_login'),
+] + urlpatterns
